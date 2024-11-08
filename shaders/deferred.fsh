@@ -21,6 +21,8 @@ const bool colortex4Clear = false;
 #define TORCH_G 0.42 //[0.0 0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.42 0.45 0.5 0.55 0.6 0.65 0.7 0.75 0.8 0.85 0.9 0.95 1.0]
 #define TORCH_B 0.11 //[0.0 0.05 0.1 0.11 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.6 0.65 0.7 0.75 0.8 0.85 0.9 0.95 1.0]
 
+#define Ambient 0.75 //[0.0 0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.6 0.65 0.7 0.75 0.8 0.85 0.9 0.95 1.0 1.05 1.1 1.15 1.2 1.25 1.3 1.35 1.4 1.45 1.5]
+
 #define SKY_BRIGHTNESS_DAY 1.0 //[0.0 0.5 0.75 1.0 1.2 1.4 1.6 1.8 2.0]
 #define SKY_BRIGHTNESS_NIGHT 1.0 //[0.0 0.5 0.75 1.0 1.2 1.4 1.6 1.8 2.0]
 #define fsign(a)  (clamp((a)*1e35,0.,1.)*2.-1.)
@@ -58,6 +60,7 @@ if (gl_FragCoord.x < 17. && gl_FragCoord.y < 17.){
 	float avgEyeIntensity = ((sunIntensity*120.+moonIntensity*4.)+skyIntensity*230.+skyIntensityNight*4.)*sky_lightmap;
 	float exposure =  0.18/log2(max(avgEyeIntensity*0.16+1.0,1.13))*0.25;
   vec3 ambient = (ambientUp*sky_lightmap*log2(1.13+sky_lightmap*1.5)+torch_lightmap*0.11*vec3(TORCH_R,TORCH_G,TORCH_B)*TORCH_AMOUNT)*exposure * vec3(1.0,0.96,0.96)+MIN_LIGHT_AMOUNT*0.001*vec3(0.75,1.0,1.25);
+  ambient *= Ambient;
   gl_FragData[0] = vec4(ambient*10.,1.0);
 }
 //Custom sky gradient LUT (256*256)
